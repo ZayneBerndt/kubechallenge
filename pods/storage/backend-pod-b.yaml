@@ -1,46 +1,41 @@
-kind: Pod
-apiVersion: v1
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: task-pv-pod
+  name: backend-b
 spec:
-  volumes:
-    - name: task-pv-storage
-      persistentVolumeClaim:
-       claimName: task-pv-claim
-  containers:
-    - name: task-pv-container
-      image: nginx
-      ports:
-        - containerPort: 80
-          name: "http-server"
+  selector:
+    matchLabels:
+      app: kubetask
+      tier: backend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kubetask
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name:
+          image: berndtzayne/nodereq
+          ports:
+            - name: http
+              containerPort: 80
       volumeMounts:
-        - mountPath: "/usr/share/nginx/html"
+        - mountPath: "add some nfs storage path"
           name: task-pv-storage
+
 ---
-apiVersion: v1
 kind: Service
-metadata:
-  name: task-pv
-spec:
-  ports:
-  - name: client
-    port: 2181
-    targetPort: 2181
-  selector:
-    app: task-pv
----
 apiVersion: v1
-kind: Service
 metadata:
-  name: task-pv-server
+  name: hello
 spec:
-  clusterIP: None
-  ports:
-  - name: server
-    port: 2888
-    targetPort: 2888
-  - name: leader-election
-    port: 3888
-    targetPort: 3888
   selector:
-    app: task-pv
+    app: hello #uses selector labels to link to frontend
+    tier: backend #uses selector labels to link to frontend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http

@@ -1,14 +1,37 @@
-kind: PersistentVolume
 apiVersion: v1
+kind: PersistentVolume
 metadata:
-  name: task-pv-volumes
-  labels:
-    type: local
+  name: kubetask-pv-a
 spec:
-  storageClassName: manual
   capacity:
-    storage: 10Gi
+    storage: 2Gi
+  volumeMode: Filesystem
+  storageClassName: kubetask-a
   accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/mnt/data"
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  #I am guessing the path would be something like this using nfs or whatever lloyds use.
+  # nfs:
+  #   path: /opt/nfs
+  #   server: nfs.f22
+  #   readOnly: false
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: kubetask-pv-a
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  storageClassName: kubetask-a
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  #I am guessing the path would be something like this using nfs or whatever lloyds use.
+  # nfs:
+  #   path: /opt/nfs
+  #   server: nfs.f22
+  #   readOnly: false
