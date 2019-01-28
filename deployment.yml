@@ -11,7 +11,9 @@ spec:
     port: 80
     targetPort: 80
   type: LoadBalancer
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,9 +33,22 @@ spec:
         track: stable
     spec:
       containers:
-      - name: nginx
-        image: "gcr.io/google-samples/hello-frontend:1.0"
-        lifecycle:
-          preStop:
-            exec:
-              command: ["/usr/sbin/nginx","-s","quit"]
+      - name:
+        image: berndtzayne/nodeexpress
+        volumeMounts:
+        - name: hostname #double check name
+          mountPath: /root/key.json
+          subPath: key.json
+        env:
+        - name: "AUTH_TOKEN"
+          valueFrom:
+            secretKeyRef:
+              name: hostname-be-b
+              key: hostnameb
+      volumes:
+      - name: #double check this
+        secret:
+          secretName: hostname-be-a
+          items:
+          - key: hostname
+            path: key.json
