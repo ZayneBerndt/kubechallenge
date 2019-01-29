@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: kubetask-pvc-a
 spec:
-  storageClassName: kubetask-a
+  storageClassName: vsphere-thin
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
@@ -19,7 +19,7 @@ apiVersion: v1
 metadata:
   name: kubetask-pvc-b
 spec:
-  storageClassName: kubetask-a
+  storageClassName: vsphere-thin
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem

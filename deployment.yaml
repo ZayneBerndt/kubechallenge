@@ -1,46 +1,43 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: frontendservice
 spec:
   selector:
-    app: hello
+    app: kubetask
     tier: frontend
   ports:
   - protocol: "TCP"
     port: 80
     targetPort: 80
-  type: LoadBalancer
-
----
+  type: NodePort
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: frontend-deployment
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: hello
-      tier: frontend
-      track: stable
-  replicas: 1
+      app: kubetask
   template:
     metadata:
       labels:
-        app: hello
-        tier: frontend
-        track: stable
+        app: kubetask
     spec:
       containers:
-      - name:
+      - name: frontend
         image: berndtzayne/nodeexpress
+        ports:
+          - name: http
+            containerPort: 80
         volumeMounts:
         - name: hostname #double check name
           mountPath: /root/key.json
           subPath: key.json
         env:
-        - name: "AUTH_TOKEN"
+        - name: #double check this
           valueFrom:
             secretKeyRef:
               name: hostname-be-b

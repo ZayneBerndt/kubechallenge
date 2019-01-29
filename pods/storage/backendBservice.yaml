@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: backendb-deployment
+spec:
+  selector:
+    app: kubetask
+    tier: backend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http

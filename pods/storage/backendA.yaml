@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-a
+  name: backenda-deployment
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: kubetask
       tier: backend
-      track: stable
-  replicas: 3
   template:
     metadata:
       labels:
         app: kubetask
-        tier: backend
-        track: stable
     spec:
       containers:
-        - name: backend-a
-          image: berndtzayne/nodereq
+      - name: backenda
+        image: berndtzayne/nodeexpress
+        ports:
+          - name: http
+            containerPort: 80
           volumeMounts:
             - mountPath: /foo
               name:
@@ -29,16 +29,3 @@ spec:
           ports:
             - name: http
               containerPort: 80
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: hello
-spec:
-  selector:
-    app: hello #uses selector labels to link to frontend
-    tier: backend #uses selector labels to link to frontend
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: http
